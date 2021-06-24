@@ -6,19 +6,16 @@ from function import *
 
 img=load_image(data)
 cv2.namedWindow('Image')
-frame = img
-hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+result = img.copy()
+frame = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+lower = np.array([155,25,0])
+upper = np.array([179,255,255])
+mask = cv2.inRange(frame, lower, upper)
+result = cv2.bitwise_and(result, result, mask=mask)
 
-lower_red = np.array([30,150,50])
-upper_red = np.array([255,255,180])
-
-mask = cv2.inRange(hsv, lower_red, upper_red)
-res = cv2.bitwise_and(frame,frame, mask= mask)
-
-cv2.imshow('frame',frame)
-cv2.imshow('mask',mask)
-cv2.imshow('res',res)
-
+cv2.imshow('mask', mask)
+cv2.imshow('result', result)
+cv2.waitKey()
 
 # Creates Trackbar with slider position and callback function
 low_k = 1 # slider start position
