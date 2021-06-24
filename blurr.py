@@ -1,40 +1,31 @@
 import cv2
-import numpy as np
-from matplotlib import pyplot as plt
-def nothing(x):
-  pass
-cv2.namedWindow('Colorbars')
-hh='Max'
-hl='Min'
-wnd = 'Colorbars'
-cv2.createTrackbar("Max", "Colorbars",0,255,nothing)
-cv2.createTrackbar("Min", "Colorbars",0,255,nothing)
-img = cv2.imread('test2.jpg',0)
-img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
-# titles = ['Original Image','BINARY','BINARY_INV','TRUNC','TOZERO','TOZERO_INV']
-# images = [img, thresh1, thresh2, thresh3, thresh4, thresh5]
-# for i in xrange(6):
-#     plt.subplot(2,3,i+1),plt.imshow(images[i],'gray')
-#     plt.title(titles[i])
-#     plt.xticks([]),plt.yticks([])
-# plt.show()
-while(1):
-   hul=cv2.getTrackbarPos("Max", "Colorbars")
-   huh=cv2.getTrackbarPos("Min", "Colorbars")
-   ret,thresh1 = cv2.threshold(img,hul,huh,cv2.THRESH_BINARY)
-   ret,thresh2 = cv2.threshold(img,hul,huh,cv2.THRESH_BINARY_INV)
-   ret,thresh3 = cv2.threshold(img,hul,huh,cv2.THRESH_TRUNC)
-   ret,thresh4 = cv2.threshold(img,hul,huh,cv2.THRESH_TOZERO)
-   ret,thresh5 = cv2.threshold(img,hul,huh,cv2.THRESH_TOZERO_INV)
-   # cv2.imshow(wnd)
-   cv2.imshow("thresh1",thresh1)
-   cv2.imshow("thresh2",thresh2)
-   cv2.imshow("thresh3",thresh3)
-   cv2.imshow("thresh4",thresh4)
-   cv2.imshow("thresh5",thresh5)
-   k = cv2.waitKey(1) & 0xFF
-   if k == ord('m'):
-     mode = not mode
-   elif k == 27:
-     break
+
+# Callback function for trackbar
+def on_change(self):
+    pass
+
+# Reads image with 0 as GRAY and 1 as BGR
+img = cv2.imread('test2.jpg', 0)
+img = cv2.resize(img, (0,0), fx=0.15, fy=0.15)
+# Creates window
+cv2.namedWindow('Image')
+
+# Creates Trackbar with slider position and callback function
+low_k = 1 # slider start position
+high_k = 21  # maximal slider position
+cv2.createTrackbar('Blur', 'Image', low_k, high_k, on_change)
+
+# Infinite loop
+while(True):
+    ksize = cv2.getTrackbarPos('Blur', 'Image')  # returns trackbar position
+    ksize = 2*ksize-1  # medianBlur allows only odd ksize values
+
+    # Blures input image
+    median = cv2.medianBlur(img, ksize)  # source, kernel size
+
+    cv2.imshow('Image', median)  # displays image 'median' in window
+    k = cv2.waitKey(1) & 0xFF
+    if k == 27:
+        break
+
 cv2.destroyAllWindows()
