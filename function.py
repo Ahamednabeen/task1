@@ -1,4 +1,13 @@
 import cv2
+import argparse
+# construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--image", required=True,
+	help="path to input file")
+args = vars(ap.parse_args())
+data = cv2.imread(args["image"])
+
+
 def on_change(self):
     pass
 def load_image(data):
