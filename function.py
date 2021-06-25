@@ -2,6 +2,9 @@ import cv2
 import argparse
 import numpy as np
 import argparse
+import imutils
+from imutils import contours
+from imutils import perspective
 
 # construct the argument parser and parse the arguments
 
@@ -65,4 +68,56 @@ def blurr_image(img,i):
         # Blures input image
         median = cv2.medianBlur(img, ksize)  # source, kernel size
         return median
-        
+
+# def find_contours(result):
+#         image =result
+#         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#         edged = cv2.dilate(image, None, iterations=1)
+#         edged = cv2.erode(edged, None, iterations=1)
+#         cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+#         cnts = imutils.grab_contours(cnts)
+#         # sort the contours from left-to-right and initialize the
+#         # 'pixels per metric' calibration variable
+#         (cnts, _) = contours.sort_contours(cnts)
+#         pixelsPerMetric = None
+#         # loop over the contours individually
+#         for c in cnts:
+#             # if the contour is not sufficiently large, ignore it
+#             if cv2.contourArea(c) < 100:
+#                 continue
+#             # compute the rotated bounding box of the contour
+#             orig = image.copy()
+#             box = cv2.minAreaRect(c)
+#             box = cv2.BoxPoints(box) if imutils.is_cv2() else cv2.boxPoints(box)
+#             box = np.array(box, dtype="int")
+#             # order the points in the contour such that they appear
+#             # in top-left, top-right, bottom-right, and bottom-left
+#             # order, then draw the outline of the rotated bounding
+#             # box
+#             box = perspective.order_points(box)
+#             cv2.drawContours(orig, [box.astype("int")], -1, (0, 255, 0), 2)
+
+
+
+def detect_objects(result):
+        # Convert Image to grayscale
+        gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
+        gray = cv2.Canny(gray, 30, 200)
+        # Create a Mask with adaptive threshold
+        mask = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 19, 5)
+
+        # Find contours
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        #cv2.imshow("mask", mask)
+        objects_contours = []
+
+        for cnt in contours:
+            area = cv2.contourArea(cnt)
+            if area > 2000:
+                #cnt = cv2.approxPolyDP(cnt, 0.03*cv2.arcLength(cnt, True), True)
+                objects_contours.append(cnt)
+
+        return objects_contours
+            
+            
