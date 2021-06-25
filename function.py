@@ -1,6 +1,8 @@
 import cv2
 import argparse
 import numpy as np
+
+
 # construct the argument parser and parse the arguments
 
 def dataloader(path):
@@ -8,8 +10,7 @@ def dataloader(path):
     return data
 
 
-def on_change(self):
-    pass
+
 def load_image(data):
     """image data is value and it converts image into another size given  
     reference:https://stackoverflow.com/questions/53152665/opencv-python-blur-image-using-trackbar
@@ -27,10 +28,18 @@ def colour_filter(img):
     return result
 
 def blurr():    
-    cv2.namedWindow('Image')
-    # Creates Trackbar with slider position and callback function
-    low_k = 1 # slider start position
-    high_k = 31  # maximal slider position
-    cv2.createTrackbar('Blur', 'Image', low_k, high_k, on_change)
+    # cv2.namedWindow('Image')
+    # # Creates Trackbar with slider position and callback function
+    # low_k = 1 # slider start position
+    # high_k = 31  # maximal slider position
+    # cv2.createTrackbar('Blur', 'Image', low_k, high_k, on_change)
     ksize = cv2.getTrackbarPos('Blur', 'Image')  # returns trackbar position
     return ksize
+
+
+def blurr_image(img,i):
+        ksize=i
+        ksize = 2*ksize-1  # medianBlur allows only odd ksize values
+        # Blures input image
+        median = cv2.medianBlur(img, ksize)  # source, kernel size
+        return median
