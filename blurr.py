@@ -4,10 +4,13 @@ import argparse
 import numpy as np
 from function import *
 
-img=load_image()
+path='test2.jpg'
+data=dataloader(path)
+
+img=load_image(data)
 
 result=colour_filter(img)
-cv2.imshow('filtered ', result)
+cv2.imshow('filtered', result)
 cv2.waitKey()
 
 

@@ -3,17 +3,14 @@ import argparse
 import numpy as np
 # construct the argument parser and parse the arguments
 
-
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-help="path to input file")
-args = vars(ap.parse_args())
-data = cv2.imread(args["image"])
+def dataloader(path):
+    data = cv2.imread(path)
+    return data
 
 
 def on_change(self):
     pass
-def load_image():
+def load_image(data):
     """image data is value and it converts image into another size given  
     reference:https://stackoverflow.com/questions/53152665/opencv-python-blur-image-using-trackbar
     filter_reference: https://stackoverflow.com/questions/30331944/finding-red-color-in-image-using-python-opencv """
