@@ -119,5 +119,19 @@ def detect_objects(result):
                 objects_contours.append(cnt)
 
         return objects_contours
-            
-            
+def draw_countours(contours,result):
+    for cnt in contours:
+
+    # Get rect
+        rect = cv2.minAreaRect(cnt)
+        (x, y), (w, h), angle = rect
+#
+
+    # Display rectangle
+        box = cv2.boxPoints(rect)
+        box = np.int0(box)
+
+        # cv2.circle(result, (int(x), int(y)), 5, (255, 255, 255), 3)
+        cv2.polylines(result, [box], True, (255, 255, 255), 2)
+        # cv2.drawContours(result, [box.astype("int")], -1, (0, 255, 0), 2)
+    cv2.imshow('contours',result)    #         

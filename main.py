@@ -1,36 +1,21 @@
 import cv2
 import argparse
 import numpy as np
-from function import dataloader,colour_filter,blurr,blurr_image, detect_objects
-from initialize import initialize
+from function import dataloader,colour_filter,blurr,blurr_image, detect_objects, draw_countours
+from initialize import initialize,init_trackbar_filter
+
 
 
 def main():
     initialize()
-    img=dataloader()
-
-    
+    img=dataloader()   
 
     result=colour_filter(img)
     contours = detect_objects(result)
-    cv2.imshow('filtered', result)
+    # cv2.imshow('filtered', result)
     cv2.waitKey()
-
-    for cnt in contours:
-
-    # Get rect
-        rect = cv2.minAreaRect(cnt)
-        (x, y), (w, h), angle = rect
-#
-
-    # Display rectangle
-        box = cv2.boxPoints(rect)
-        box = np.int0(box)
-
-        # cv2.circle(result, (int(x), int(y)), 5, (255, 255, 255), 3)
-        cv2.polylines(result, [box], True, (255, 255, 255), 2)
-        # cv2.drawContours(result, [box.astype("int")], -1, (0, 255, 0), 2)
-    cv2.imshow('contours',result)
+    
+    draw_countours(contours,result)
     # Infinite loop
     while(True):
         median=blurr_image(img,blurr())
@@ -40,6 +25,7 @@ def main():
             break
     cv2.destroyAllWindows()
 
+    init_trackbar_filter()
 if __name__ == "__main__":
 
     main()
