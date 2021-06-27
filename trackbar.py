@@ -2,7 +2,7 @@ import cv2
 import sys
 import numpy as np
 from function import dataloader
-from funtion2 import *
+from funtion2 import initialize_for_filter,get_pos,arrays,operation,print_results
 def main():
     initialize_for_filter()
     image = dataloader()
@@ -14,9 +14,7 @@ def main():
 
     while(1):
         hMin,sMin,vMin,hMax,sMax,vMax=get_pos()
-        # Set minimum and max HSV values to display
-        lower = np.array([hMin, sMin, vMin])
-        upper = np.array([hMax, sMax, vMax])
+        lower,upper=arrays(hMin,sMin,vMin,hMax,sMax,vMax)
         output=operation(image,lower,upper)
         print_results(hMin,sMin,vMin,hMax,sMax,vMax)
         # Display output image

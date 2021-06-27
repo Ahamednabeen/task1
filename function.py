@@ -69,37 +69,24 @@ def blurr_image(img,i):
         median = cv2.medianBlur(img, ksize)  # source, kernel size
         return median
 
-# def find_contours(result):
-#         image =result
-#         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-#         edged = cv2.dilate(image, None, iterations=1)
-#         edged = cv2.erode(edged, None, iterations=1)
-#         cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-#         cnts = imutils.grab_contours(cnts)
-#         # sort the contours from left-to-right and initialize the
-#         # 'pixels per metric' calibration variable
-#         (cnts, _) = contours.sort_contours(cnts)
-#         pixelsPerMetric = None
-#         # loop over the contours individually
-#         for c in cnts:
-#             # if the contour is not sufficiently large, ignore it
-#             if cv2.contourArea(c) < 100:
-#                 continue
-#             # compute the rotated bounding box of the contour
-#             orig = image.copy()
-#             box = cv2.minAreaRect(c)
-#             box = cv2.BoxPoints(box) if imutils.is_cv2() else cv2.boxPoints(box)
-#             box = np.array(box, dtype="int")
-#             # order the points in the contour such that they appear
-#             # in top-left, top-right, bottom-right, and bottom-left
-#             # order, then draw the outline of the rotated bounding
-#             # box
-#             box = perspective.order_points(box)
-#             cv2.drawContours(orig, [box.astype("int")], -1, (0, 255, 0), 2)
 
 
 
 def detect_objects(result):
+        """this function accepts filtered image(result of filter operation) as input and detect the objects in it.First it converts the image (bgr)into gray scale
+        .Then it performs canny edge detection in it .Then it creates a mask with that image (gray varriable) with cv2.adaptivethreshold method.Then it find the 
+        contour coordinates from the mask by cv2.findcontours method and the coordinate values will be stored in the varriable contours.Then it initializes a empty
+        list (objects_contours) to store the coordinate values after sorting and neglecting small contours .It creates a loop that loops in contours .In that loop 
+        first it finds the area of the current contour and store it in area Then check if area is greater than a threshold value.If only yes it appends that contour 
+        the object_contour list.And finally when the loop is over it returns that list(object contours)
+        Parameters: gray(mat)::input image
+                    mask(mat)::binary image
+                    contours(numpy array)::contours with coordinates
+                    object_contours(list)::listt of final contours
+                    area(float)::area of respective contour
+        return type:  object_contours(list)::listt of final contours
+        reference  :https://pysource.com/2021/05/28/measure-size-of-an-object-with-opencv-aruco-marker-and-python/          
+                    """
         # Convert Image to grayscale
         gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
         gray = cv2.Canny(gray, 30, 200)
@@ -120,12 +107,22 @@ def detect_objects(result):
 
         return objects_contours
 def draw_countours(contours,result):
+    """ This function is to draw polylines on the contours.It takes contours(list containing contours) and result(image with colour filtered output) .It creates a for loop to loop in the contours.Fisrt it creats a rectangle with minimum possible size
+    and store the paramters in rect(varriable).Then it extracts the paramters(axis coordinates,height,width,angle) and store it in rect .It creates a bounding box 
+    with the paramters in the rect and to convert those into integers(cv2 only supports integers for drawing).Then using cv2.polylines function it draws the box coordinates
+     and displays the result at end of loop
+     parameters:contours(listt)::list of contours
+                result(mat) :: input image
+                rect(list)::rectangle paramters
+                box(list):: box coordinatets
+    return_type:none
+    reference:https://pysource.com/2021/05/28/measure-size-of-an-object-with-opencv-aruco-marker-and-python/ """
     for cnt in contours:
 
     # Get rect
         rect = cv2.minAreaRect(cnt)
         (x, y), (w, h), angle = rect
-#
+
 
     # Display rectangle
         box = cv2.boxPoints(rect)

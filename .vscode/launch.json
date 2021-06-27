@@ -9,7 +9,8 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",  "args": ["-i", "test2.jpg"]
+            "console": "integratedTerminal",  
+            "args": ["-i","test3.jpg"]
         }
     ]
 }

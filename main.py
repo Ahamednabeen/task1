@@ -7,14 +7,13 @@ from initialize import initialize,init_trackbar_filter
 
 
 def main():
-    initialize()
     img=dataloader()   
 
     result=colour_filter(img)
     contours = detect_objects(result)
     # cv2.imshow('filtered', result)
     cv2.waitKey()
-    
+    initialize() 
     draw_countours(contours,result)
     # Infinite loop
     while(True):
